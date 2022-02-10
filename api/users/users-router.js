@@ -30,17 +30,13 @@ router.delete('/:id', middleware.validateUserId, (req, res) => {
 });
 
 router.get('/:id/posts',middleware.validateUserId, (req, res) => {
-  posts.get().then(allPosts => {
-    const all = allPosts.filter(post => post["user_id"] === parseInt(req.params.id));
-    res.json(all)
-  })
+  users.getUserPosts(req.params.id).then(allPosts => res.json(allPosts))
 });
 
 router.post('/:id/posts', middleware.validateUserId, middleware.validatePost, (req, res) => {
   // RETURN THE NEWLY CREATED USER POST
   // this needs a middleware to verify user id - Done
   // and another middleware to check that the request body is valid - Done
-  // req.body.user_id = req.params.id;
   posts.insert(req.body).then(post => res.json(post))
 });
 

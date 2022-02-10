@@ -10,11 +10,11 @@ function validateUserId(req, res, next) {
   users.getById(req.params.id)
     .then(user => {
       if(!user) return res.status(404).json({message: "User is not found"})
-     
-    })
+      else next();
+  })
     .catch(() => res.status(500).json({message: "Could not retrieve user info"}))
-    next()
 }
+
 
 function validateUser(req, res, next) {
   if(!("name" in req.body)) return res.status(400).json({message: "missing required name"})
@@ -23,8 +23,10 @@ function validateUser(req, res, next) {
 
 function validatePost(req, res, next) {
   if(!("text" in req.body)) return res.status(400).json({message: "missing required text field"});
+  req.body.user_id = req.params.id
   next()
 }
+
 
 // do not forget to expose these functions to other modules
 module.exports = {
